@@ -1,5 +1,12 @@
+import GlobalStyles from './styles/GlobalStyles'
+
 function App() {
-  return <div>the wild oasis</div>
+  return (
+    <>
+      <GlobalStyles />
+      <h1>The Wild Oasis</h1>
+    </>
+  )
 }
 
 export default App
