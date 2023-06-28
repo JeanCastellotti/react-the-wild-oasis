@@ -1,5 +1,19 @@
+import CabinTable from '../features/cabins/CabinTable'
+import Heading from '../ui/Heading'
+import Row from '../ui/Row'
+
 function Cabins() {
-  return <div>Cabins</div>
+  return (
+    <>
+      <Row type="horizontal">
+        <Heading>Cabins</Heading>
+        <p>Filter / Sort</p>
+      </Row>
+      <Row>
+        <CabinTable />
+      </Row>
+    </>
+  )
 }
 
 export default Cabins
