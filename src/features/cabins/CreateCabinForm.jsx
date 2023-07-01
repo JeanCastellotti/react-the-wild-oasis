@@ -10,7 +10,7 @@ import FormRow from '../../ui/FormRow'
 import { useCreateCabin } from './useCreateCabin'
 import { useEditCabin } from './useEditCabin'
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { id: editId, ...editValues } = cabinToEdit
 
   const isEdit = Boolean(editId)
@@ -27,18 +27,20 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   function onSubmit(data) {
     const image = typeof data.image === 'string' ? data.image : data.image[0]
     if (isEdit) {
-      return console.log(data)
       edit(
         { newCabin: { ...data, image }, id: editId },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset()
+            onClose?.()
+          },
         }
       )
     } else create({ ...data, image }, { onSuccess: () => reset() })
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} type={onClose ? 'modal' : 'base'}>
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
           type="text"
@@ -113,7 +115,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
           Cancel
         </Button>
         <Button disabled={isCreating || isEditing}>
