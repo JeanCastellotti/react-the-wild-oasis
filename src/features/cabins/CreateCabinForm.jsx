@@ -36,7 +36,16 @@ function CreateCabinForm({ cabinToEdit = {}, onClose }) {
           },
         }
       )
-    } else create({ ...data, image }, { onSuccess: () => reset() })
+    } else
+      create(
+        { ...data, image },
+        {
+          onSuccess: () => {
+            reset()
+            onClose?.()
+          },
+        }
+      )
   }
 
   return (
