@@ -1,7 +1,8 @@
+import { RESULTS_PER_PAGE } from '../utils/constants'
 import { getToday } from '../utils/helpers'
 import supabase from './supabase'
 
-export async function getBookings({ filter, sortBy }) {
+export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
     .from('bookings')
     .select(
@@ -11,6 +12,12 @@ export async function getBookings({ filter, sortBy }) {
   if (filter) query = query[filter.method || 'eq'](filter.field, filter.value)
 
   query = query.order(sortBy.field, { ascending: sortBy.direction === 'asc' })
+
+  if (page) {
+    const from = (page - 1) * RESULTS_PER_PAGE
+    const to = from + RESULTS_PER_PAGE - 1
+    query = query.range(from, to)
+  }
 
   const { data, error } = await query
 
