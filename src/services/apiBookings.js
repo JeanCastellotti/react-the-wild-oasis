@@ -6,7 +6,8 @@ export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
     .from('bookings')
     .select(
-      'id, created_at, start_date, end_date, nights, guests, status, total_price, cabins(name), guests(fullname, email)'
+      'id, created_at, start_date, end_date, nights, guests, status, total_price, cabins(name), guests(fullname, email)',
+      { count: 'exact' }
     )
 
   if (filter) query = query[filter.method || 'eq'](filter.field, filter.value)
@@ -19,13 +20,13 @@ export async function getBookings({ filter, sortBy, page }) {
     query = query.range(from, to)
   }
 
-  const { data, error } = await query
+  const { data, error, count } = await query
 
   if (error) {
     throw new Error('Bookings could not be loaded')
   }
 
-  return data
+  return { data, count }
 }
 
 export async function getBooking(id) {
