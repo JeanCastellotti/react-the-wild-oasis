@@ -30,6 +30,7 @@ export async function createEditCabin(newCabin, id) {
     '/',
     ''
   )
+
   const imagePath = hasImagePath
     ? newCabin.image
     : `${
