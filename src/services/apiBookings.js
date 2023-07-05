@@ -78,9 +78,9 @@ export async function getStaysAfterDate(date) {
 export async function getStaysTodayActivity() {
   const { data, error } = await supabase
     .from('bookings')
-    .select('*, guests(fullName, nationality, countryFlag)')
+    .select('*, guest:guests(fullname, nationality, country_flag)')
     .or(
-      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+      `and(status.eq.unconfirmed,start_date.eq.${getToday()}),and(status.eq.checked-in,end_date.eq.${getToday()})`
     )
     .order('created_at')
 
@@ -106,6 +106,7 @@ export async function updateBooking(id, obj) {
   if (error) {
     throw new Error('Booking could not be updated')
   }
+
   return data
 }
 
@@ -116,5 +117,6 @@ export async function deleteBooking(id) {
   if (error) {
     throw new Error('Booking could not be deleted')
   }
+
   return data
 }
